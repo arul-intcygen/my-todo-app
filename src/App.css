@@ -1,0 +1,294 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* --- GLOBAL RESET & VARIABLES --- */
+:root {
+  /* Palet Warna Notion Green Dark Mode */
+  --bg-main: #191919;       /* Latar belakang utama */
+  --bg-sidebar: #202020;    /* Sidebar sedikit lebih terang */
+  --bg-card: #2C2C2C;       /* Warna kartu/widget */
+  --border-color: #3F3F3F;  /* Garis tepi tipis */
+  --accent-green: #5B8C5A;  /* Hijau estetik */
+  --text-main: #EFEFEF;     /* Putih tulisan */
+  --text-muted: #898989;    /* Tulisan abu-abu */
+  --radius: 6px;            /* Sudut elemen */
+}
+
+* {
+  box-sizing: border-box; /* PENTING: Agar padding tidak merusak ukuran fixed height */
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden; /* Mencegah scroll samping yang tidak perlu */
+}
+
+/* --- LAYOUT UTAMA --- */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+  width: 240px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex-shrink: 0; /* Sidebar tidak boleh mengecil */
+}
+
+.sidebar h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+  color: var(--text-main);
+}
+
+.sidebar h3 { 
+  font-size: 0.8rem; 
+  color: var(--text-muted); 
+  text-transform: uppercase; 
+  margin-bottom: 10px; 
+}
+
+.menu-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; color: var(--text-main);
+  cursor: pointer; border-radius: 4px; font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.menu-item:hover { background-color: var(--bg-card); }
+.menu-item svg { color: var(--accent-green); }
+
+/* --- MAIN CONTENT --- */
+.main-content {
+  flex: 1;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Banner Image ala Ghibli */
+.banner {
+  height: 220px; 
+  width: 100%;
+  
+  /* Gambar Arrietty (Nuansa Hijau) dengan Gradasi ke Hitam di bawahnya */
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 60%, #191919), 
+                    url('./assets/ghibli1.jpeg');
+                    
+  background-size: cover;
+  background-position: center; 
+  position: relative;
+  /* Tidak perlu border-radius di sini karena nempel ke sisi layar */
+  margin-bottom: -40px; /* Efek overlap widget */
+}
+
+.dashboard-area {
+  padding: 30px;
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Kiri (2 bagian), Kanan (1 bagian) */
+  gap: 20px;
+  position: relative; 
+  z-index: 10;
+}
+
+/* --- WIDGETS GENERIC --- */
+.widget {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.widget-title {
+  font-size: 0.9rem; 
+  font-weight: 600; 
+  color: var(--text-muted);
+  margin-bottom: 15px; 
+  display: flex; 
+  align-items: center; 
+  gap: 8px;
+  flex-shrink: 0; /* Judul tidak boleh tergencet */
+}
+
+/* --- SPESIFIK: QUOTE BOX (FIXED LAYOUT) --- */
+.quote-box {
+  /* Pastikan tinggi ini absolut (bukan min-height) */
+  height: 220px; 
+  
+  /* Pastikan card tidak boleh menyusut digencet elemen lain */
+  flex-shrink: 0; 
+  
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+}
+
+/* Wrapper Internal (dari QuoteSection.jsx) */
+.quote-container-inner {
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: space-between;
+  min-height: 0; /* Trik CSS agar flex-child bisa scroll */
+}
+
+
+/* File: src/App.css */
+
+.quote-text-area {
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  
+  /* HAPUS/GANTI baris ini: justify-content: center; */
+  /* GANTI DENGAN INI: Agar teks selalu mulai dari atas (tidak loncat) */
+  justify-content: flex-start; 
+  
+  /* Berikan jarak pasti dari judul "Daily Inspiration" */
+  padding-top: 10px; 
+  
+  /* Logika Scroll tetap ada untuk jaga-jaga quote novel */
+  overflow-y: auto; 
+  margin-bottom: 15px;
+  padding-right: 5px; 
+}
+
+/* Mempercantik Scrollbar (Opsional) */
+.quote-text-area::-webkit-scrollbar { width: 4px; }
+.quote-text-area::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 2px; }
+.quote-text-area::-webkit-scrollbar-track { background: transparent; }
+
+.quote-text {
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.quote-author { 
+  display: block; 
+  margin-top: 10px; 
+  font-size: 0.8rem; 
+  color: var(--accent-green); 
+  text-align: right;
+}
+
+/* Tombol di dalam Quote Box */
+.quote-box button {
+  align-self: flex-start;
+  flex-shrink: 0; /* Tombol TIDAK BOLEH mengecil */
+}
+
+/* --- SPESIFIK: POMODORO --- */
+.pomodoro-display { 
+  font-size: 3rem; 
+  font-weight: 700; 
+  text-align: center; 
+  letter-spacing: 2px; 
+  margin: 10px 0;
+  font-variant-numeric: tabular-nums; /* Agar angka tidak "goyang" saat detik berubah */
+}
+
+.pomodoro-controls { 
+  display: flex; 
+  justify-content: center; 
+  gap: 10px; 
+}
+
+.btn-pomo { 
+  background: var(--bg-main); 
+  border: 1px solid var(--accent-green); 
+  color: var(--accent-green); 
+  padding: 6px 16px; 
+  border-radius: 4px; 
+  cursor: pointer; 
+  transition: 0.2s;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.btn-pomo:hover { 
+  background: var(--accent-green); 
+  color: white; 
+}
+.btn-pomo:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- SPESIFIK: TODO LIST --- */
+.task-input-group { display: flex; gap: 10px; margin-bottom: 15px; }
+
+.task-input { 
+  flex: 1; 
+  background: var(--bg-main); 
+  border: 1px solid var(--border-color); 
+  padding: 8px 12px; 
+  color: white; 
+  border-radius: 4px; 
+  outline: none;
+}
+.task-input:focus { border-color: var(--accent-green); }
+
+.task-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0; border-bottom: 1px solid var(--border-color);
+}
+.task-item:last-child { border-bottom: none; }
+
+.task-left { display: flex; align-items: center; gap: 12px; }
+
+.check-circle { 
+  width: 18px; 
+  height: 18px; 
+  border: 2px solid var(--text-muted); 
+  border-radius: 50%; 
+  cursor: pointer; 
+  transition: 0.2s;
+  flex-shrink: 0;
+}
+
+.check-circle.checked { 
+  background: var(--accent-green); 
+  border-color: var(--accent-green); 
+}
+
+.task-text { font-size: 0.95rem; }
+.task-text.done { text-decoration: line-through; color: var(--text-muted); }
+
+/* --- RESPONSIVE (HP) --- */
+@media (max-width: 768px) {
+  .app-container { flex-direction: column; }
+  .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); }
+  .dashboard-area { grid-template-columns: 1fr; }
+  .banner { height: 150px; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.icon-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Pastikan tombol quote punya tinggi yang konsisten */
+.quote-box button {
+  height: 36px; /* Tinggi Fix (sesuaikan jika perlu) */
+  display: flex;
+  align-items: center;
+}
